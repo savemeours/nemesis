@@ -29,33 +29,38 @@ Stay tuned.
 ### Model
 Stay tuned
 
-### 1. Prepare the Database
+## Run locally
 
-Download and unzip the raw dataset, then convert it to SQLite:
+### 1. Install backend dependencies
 
-```bash
-# Convert raw jsonl data / sql data
-
-# Place the resulting .SQL file at the expected path:
-mv dashboard.sqlite backend/data/dashboard.sqlite
-
-
-```
-
-The backend expects the database at `backend/data/dashboard.sqlite`.
-
-### 2. Run the Application
-
-**1. Start the backend**
+Use Node.js 22 or 24 and npm.
 
 ```bash
 cd backend
+npm ci
+```
+
+### 2. Import the dashboard database
+
+Download the SQL dataset linked above. If it is archived, extract it first. From the `backend` directory, import the SQL dump into the SQLite database used by the application.
+
+```bash
+npm run db:import -- --in /path/to/dashboard.sql
+```
+
+Replace `/path/to/dashboard.sql` with the path to your downloaded file. The command writes to `backend/data/dashboard.sqlite` by default. It also accepts SQLite backups with a `.sqlite`, `.sqlite3`, or `.db` extension. If you already have a dashboard database in use, stop the backend and back it up before importing.
+
+### 3. Start the application
+
+**1. Start the backend** from the `backend` directory.
+
+```bash
 npm start
 ```
 
-The backend runs on `http://127.0.0.1:3000`.
+The backend uses port 3000 by default. Open `http://127.0.0.1:3000/api/health` to confirm it is responding.
 
-**2. Serve the frontend** (in a second terminal)
+**2. Serve the frontend** from the repository root in a second terminal.
 
 ```bash
 cd frontend
@@ -69,11 +74,6 @@ The frontend is preconfigured to call the backend at `http://127.0.0.1:3000/api`
 ## Notes
 
 - No frontend build step required — plain HTML/CSS/JS.
-- If `backend/node_modules` is missing, install dependencies:
-```bash
-  cd backend
-  npm install
-```
 - For development mode with hot reload:
 ```bash
   cd backend
